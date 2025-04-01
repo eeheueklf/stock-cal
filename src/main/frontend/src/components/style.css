@@ -1,0 +1,4 @@
+:root {
+    --global_width_size: 1320px;
+    --content_width_size: calc(var(--global_width_size) - 610px - 30px - 30px);
+}
