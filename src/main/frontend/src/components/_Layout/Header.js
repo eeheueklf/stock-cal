@@ -17,6 +17,7 @@ const Header = () => {
 };
 
 const HeaderContainer = styled.header`
+    margin-top: 20px;
     padding: 10px 20px;
     display: flex;
 `;

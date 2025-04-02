@@ -23,7 +23,7 @@ const Index = () => {
 };
 
 const LayoutContainer = styled.div`
-    font-family: 'Arial', sans-serif;
+    font-family: 'SUIT', sans-serif;
     color: #000;
     font-size: 14px;
     overflow-x: hidden;
