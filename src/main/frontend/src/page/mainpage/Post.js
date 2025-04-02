@@ -4,11 +4,23 @@ import styled from 'styled-components';
 const Post = () => {
     return (
         <PostContainer>
-            <PostTitle>Blog Post Title</PostTitle>
-            <PostDate>April 1, 2025</PostDate>
+            <PostTitle>배당금 재투자 계산기</PostTitle>
+            <PostDate>postdate</PostDate>
             <PostContent>
-                <p>This is the content of the blog post...</p>
-                <p>Write more about the topic here...</p>
+                <p>post...</p>
+                <p>here...</p>
+                <p>here...</p>
+                <p>here...</p>
+                <p>here...</p>
+                <p>here...</p>
+                <p>here...</p>
+                <p>here...</p>
+                <p>here...</p>
+                <p>here...</p>
+                <p>here...</p>
+                <p>here...</p>
+                <p>here...</p>
+                <p>here...</p>
             </PostContent>
         </PostContainer>
     );
@@ -22,7 +34,7 @@ const PostContainer = styled.article`
 
 const PostTitle = styled.h2`
   font-size: 2.5rem;
-  color: #333;
+  color: #333;font-family: "Hanna", sans-serif;
 `;
 
 const PostDate = styled.p`

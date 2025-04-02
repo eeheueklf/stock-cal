@@ -6,13 +6,12 @@ import image2 from "../../image/Frame5.png"
 const Sidebar = () => {
     return (
         <SidebarContainer>
-            <h3>F I R E R E T I R E</h3>
-            <ul>
-                <li><img src={image} width={"100%"} alt="이미지"/></li>
-                <li><img src={image2} width={"100%"} alt="이미지"/></li>
+            <StyledUl>
+                <SideLi><StyledImage  src={image} width={"100%"} alt="노후자금 계산하기"/></SideLi>
+                <SideLi><StyledImage  src={image2} width={"100%"} alt="배당금 재투자 계산기"/></SideLi>
 
 
-            </ul>
+            </StyledUl>
         </SidebarContainer>
     );
 };
@@ -27,7 +26,25 @@ const SidebarContainer = styled.aside`
     bottom: 0;
     z-index: 1;
     padding-right: 20px;
-    border-right: 1px solid grey;
+    //border-right: 1px solid grey;
+    @media screen and (max-width: 1360px) {
+        display:none;
+    }
+`;
+
+const StyledUl = styled.ul`
+    list-style: none;
+`
+
+const SideLi = styled.li`
+    margin : 20px 0px;
+    cursor:pointer;
+`
+
+const StyledImage = styled.img`
+    width: 100%;
+    border-radius:8px;
+    display: block;
 `;
 
 export default Sidebar;

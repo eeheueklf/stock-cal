@@ -1,4 +1,16 @@
+
+@font-face {
+    font-family: "Hanna";
+    font-weight: normal;
+    src: url("../font/BMHANNAPro.ttf") format("truetype");
+}
+
 :root {
     --global_width_size: 1320px;
     --content_width_size: calc(var(--global_width_size) - 610px - 30px - 30px);
+    font-family: "Hanna", sans-serif;
+}
+
+::selection{
+    background-color: #e47171;
 }

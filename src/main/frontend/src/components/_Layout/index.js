@@ -9,9 +9,7 @@ const Index = () => {
     return (
         <LayoutContainer>
             <Wrap>
-            <SidebarContainer>
                 <Sidebar />
-            </SidebarContainer>
             <ContentContainer>
                 <Header />
                 <MainContent>
@@ -26,12 +24,12 @@ const Index = () => {
 
 const LayoutContainer = styled.div`
     font-family: 'Arial', sans-serif;
-    background: #FFF;
     color: #000;
     font-size: 14px;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     display:block;
+    background: #F5F5F5;
 `;
 
 const Wrap = styled.div`
@@ -45,10 +43,15 @@ const ContentContainer = styled.div`
     display: table-cell;
     position: relative;
     width: calc(var(--global_width_size) - 600px);
+    @media screen and (max-width: 1360px)  {
+        width: 100%;
+        display: block;
+        border-right: 0;
+    }
 `;
 
 const MainContent = styled.main`
-    width: 70%;
+    width: 100%;
 `;
 
 const Widget = styled.div`
@@ -56,9 +59,10 @@ const Widget = styled.div`
     width: 305px;
     position: fixed;
     top: 52px;
+    @media screen and (max-width: 1360px) {
+        display:none;
+    }
 `
 
-const SidebarContainer = styled.div`
-`;
 
 export default Index;
