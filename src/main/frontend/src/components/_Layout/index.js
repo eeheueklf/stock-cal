@@ -1,9 +1,12 @@
 import React from 'react';
 import Header from './Header';
 import Sidebar from './Sidebar';
-import Post from '../../page/mainpage/Post';
 import styled from 'styled-components';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
 import "../style.css"
+import DividendCalc from '../../page/mainpage/DividendCalc';
+import RetirementCalc from "../../page/mainpage/RetirementCalc";
 
 const Index = () => {
     return (
@@ -13,7 +16,10 @@ const Index = () => {
             <ContentContainer>
                 <Header />
                 <MainContent>
-                    <Post />
+                    <Routes>
+                        <Route path="/divid" element={<DividendCalc />} />
+                        <Route path="/retire" element={<RetirementCalc />} />
+                    </Routes>
                 </MainContent>
             </ContentContainer>
                 <Widget/>

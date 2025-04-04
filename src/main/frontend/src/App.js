@@ -1,18 +1,15 @@
 
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import './App.css';
-import Main from './components/_Layout';
-import DivCalc from "./page/DividendCalculator";
+import Index from "./components/_Layout/index";
+
 
 function App() {
     return (
         <div className="App">
-            <BrowserRouter>
-                <Routes>
-                    <Route path="/divcalc" element={<DivCalc />} />
-                    <Route path="/" element={<Main />} />
-                </Routes>
-            </BrowserRouter>
+            <Router>
+                <Index />
+            </Router>
         </div>
     );
 }

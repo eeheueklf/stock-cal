@@ -2,14 +2,19 @@ import React from 'react';
 import styled from 'styled-components';
 import image from "../../image/Frame6.png"
 import image2 from "../../image/Frame5.png"
+import { useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
+    const navigate = useNavigate();
     return (
         <SidebarContainer>
             <StyledUl>
-                <SideLi><StyledImage  src={image} width={"100%"} alt="노후자금 계산하기"/></SideLi>
-                <SideLi><StyledImage  src={image2} width={"100%"} alt="배당금 재투자 계산기"/></SideLi>
-
+                <SideLi onClick={() => navigate("/retire")} style={{ cursor: "pointer" }}>
+                    <StyledImage src={image} width={"100%"} alt="노후자금 계산하기" />
+                </SideLi>
+                <SideLi onClick={() => navigate("/divid")} style={{ cursor: "pointer" }}>
+                    <StyledImage src={image2} width={"100%"} alt="배당금 재투자 계산기" />
+                </SideLi>
 
             </StyledUl>
         </SidebarContainer>
