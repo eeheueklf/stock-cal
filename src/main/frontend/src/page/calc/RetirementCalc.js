@@ -5,7 +5,7 @@ import FormField from "../../components/_Form/FormField";
 import InfoItem from "../../components/_Form/InfoItem";
 
 
-const DividendCalc = () => {
+const RetirementCalc = () => {
     const [options, setOptions] = useState({
         tax: "과세(직투)",
         inflation: "3.0%",
@@ -53,7 +53,7 @@ const DividendCalc = () => {
 
     return (
         <PostContainer>
-            <PostTitle>배당금 재투자 계산기</PostTitle>
+            <PostTitle>ㄶㅈㄱ</PostTitle>
             <PostContent>
                 <OptionsGrid>
                     {optionFields.map((field, index) => (
@@ -85,9 +85,9 @@ const DividendCalc = () => {
     );
 };
 const DefinitionList = styled.dl`
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 `;
 const PostContainer = styled.article`
     max-width: 800px;
@@ -109,22 +109,22 @@ const PostContent = styled.div`
 `;
 
 const ContentWrapper = styled.div`
-  display: flex;
-  justify-content: space-between; /* 섹션 사이 여백 균등 */
-  gap: 20px; /* 섹션 간격 */
-  margin-top: 20px;
+    display: flex;
+    justify-content: space-between; /* 섹션 사이 여백 균등 */
+    gap: 20px; /* 섹션 간격 */
+    margin-top: 20px;
 
-  @media screen and (max-width: 768px) {
-    flex-direction: column; /* 화면이 작으면 세로로 배치 */
-  }
+    @media screen and (max-width: 768px) {
+        flex-direction: column; /* 화면이 작으면 세로로 배치 */
+    }
 `;
 
 const Section = styled.section`
-  flex: 1; /* 두 섹션이 같은 비율로 공간 차지 */
-  padding: 0 15px;
-  background: #f9f9f9;
-  border-radius: 8px;
-  min-width: 300px; /* 너무 좁아지지 않도록 */
+    flex: 1; /* 두 섹션이 같은 비율로 공간 차지 */
+    padding: 0 15px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    min-width: 300px; /* 너무 좁아지지 않도록 */
 `;
 
 
@@ -150,13 +150,13 @@ const Button = styled.button`
 `
 
 const OptionsGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr); /* 2열 그리드 */
-  gap: 15px;
-  padding: 15px;
-  background: #f9f9f9;
-  border-radius: 8px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2열 그리드 */
+    gap: 15px;
+    padding: 15px;
+    background: #f9f9f9;
+    border-radius: 8px;
 `;
 
 
-export default DividendCalc;
+export default RetirementCalc;

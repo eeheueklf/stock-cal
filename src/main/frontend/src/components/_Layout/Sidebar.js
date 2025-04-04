@@ -12,7 +12,10 @@ const Sidebar = () => {
                 <SideLi onClick={() => navigate("/retire")} style={{ cursor: "pointer" }}>
                     <StyledImage src={image} width={"100%"} alt="노후자금 계산하기" />
                 </SideLi>
-                <SideLi onClick={() => navigate("/divid")} style={{ cursor: "pointer" }}>
+                <SideLi onClick={() => navigate("/")} style={{ cursor: "pointer" }}>
+                    <StyledImage src={image2} width={"100%"} alt="배당금 재투자 계산기" />
+                </SideLi>
+                <SideLi onClick={() => navigate("/test")} style={{ cursor: "pointer" }}>
                     <StyledImage src={image2} width={"100%"} alt="배당금 재투자 계산기" />
                 </SideLi>
 

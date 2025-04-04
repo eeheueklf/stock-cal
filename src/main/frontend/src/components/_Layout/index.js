@@ -5,8 +5,9 @@ import styled from 'styled-components';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import "../style.css"
-import DividendCalc from '../../page/mainpage/DividendCalc';
-import RetirementCalc from "../../page/mainpage/RetirementCalc";
+import DividendCalc from '../../page/calc/DividendCalc';
+import RetirementCalc from "../../page/calc/RetirementCalc";
+import Test from "../../page/calc/test";
 
 const Index = () => {
     return (
@@ -17,8 +18,9 @@ const Index = () => {
                 <Header />
                 <MainContent>
                     <Routes>
-                        <Route path="/divid" element={<DividendCalc />} />
+                        <Route path="/" element={<DividendCalc />} />
                         <Route path="/retire" element={<RetirementCalc />} />
+                        <Route path="/test" element={<Test />} />
                     </Routes>
                 </MainContent>
             </ContentContainer>

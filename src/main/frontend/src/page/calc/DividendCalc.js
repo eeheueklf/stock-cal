@@ -3,23 +3,24 @@ import { useState } from "react";
 import styled from 'styled-components';
 import FormField from "../../components/_Form/FormField";
 import InfoItem from "../../components/_Form/InfoItem";
+import axios from 'axios';
 
 
-const RetirementCalc = () => {
+const DividendCalc = () => {
     const [options, setOptions] = useState({
-        tax: "과세(직투)",
+        tax: "과세",
         inflation: "3.0%",
         reinvest: "No",
         dividendGrowth: "8.0%",
-        initialInvestment: "100,000",
+        initialInvestment: "0",
         dividendYield: "3.6%",
-        monthlyInvestment: "420,000",
+        monthlyInvestment: "0",
         dividendCycle: "분기",
         monthlyIncrease: "0"
     });
 
     const optionFields = [
-        { label: "과세여부", name: "tax", options: ["과세(직투)", "비과세"] },
+        { label: "과세여부", name: "tax", options: ["과세", "비과세"] },
         { label: "물가상승률", name: "inflation", options: ["2.0%", "2.5%", "3.0%", "3.5%", "4.0%"] },
         { label: "배당재투자", name: "reinvest", options: ["Yes", "No"] },
         { label: "배당성장률", name: "dividendGrowth", options: ["6.0%", "7.0%", "8.0%", "9.0%", "10.0%"] },
@@ -51,6 +52,42 @@ const RetirementCalc = () => {
         setOptions({ ...options, [name]: value });
     };
 
+    const handleSubmit = async (e) => {
+        e.preventDefault(); // 폼 제출 방지
+
+        try {
+            const payload = {
+                tax: options.tax,
+                inflation: parseFloat(options.inflation),  // 문자열을 숫자로 변환
+                reinvest: options.reinvest === "Yes",  // Yes/No를 boolean으로 변환
+                dividendGrowth: parseFloat(options.dividendGrowth),
+                initialInvestment: parseFloat(options.initialInvestment),
+                dividendYield: parseFloat(options.dividendYield),
+                monthlyInvestment: parseFloat(options.monthlyInvestment),
+                dividendCycle: options.dividendCycle,
+                monthlyIncrease: parseFloat(options.monthlyIncrease)
+            };
+
+            console.log(payload)
+
+            const response = await axios.post('http://localhost:8080/api/dividend', payload, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'  // 서버에서 JSON을 받아들일 수 있도록 설정
+                }
+            });
+
+            console.log('Response:', response.data); // 서버에서 반환한 데이터 처리
+        } catch (error) {
+            console.error("Error in POST request:", error);
+            // 에러 상태 로그
+            if (error.response) {
+                console.error("Response error:", error.response.data);
+                console.error("Response status:", error.response.status);
+            }
+        }
+    };
+
     return (
         <PostContainer>
             <PostTitle>배당금 재투자 계산기</PostTitle>
@@ -61,14 +98,14 @@ const RetirementCalc = () => {
                             key={index}
                             label={field.label}
                             name={field.name}
-                            value={field.name}
+                            value={options[field.name]}
                             onChange={handleChange}
                             options={field.options}
                             type={field.type}
                         />
                     ))}
                     <ButtonWrap>
-                        <Button>계산하기</Button>
+                        <Button onClick={handleSubmit}>계산하기</Button>
                     </ButtonWrap>
                 </OptionsGrid>
                 <ContentWrapper>
@@ -85,9 +122,9 @@ const RetirementCalc = () => {
     );
 };
 const DefinitionList = styled.dl`
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 `;
 const PostContainer = styled.article`
     max-width: 800px;
@@ -109,22 +146,22 @@ const PostContent = styled.div`
 `;
 
 const ContentWrapper = styled.div`
-    display: flex;
-    justify-content: space-between; /* 섹션 사이 여백 균등 */
-    gap: 20px; /* 섹션 간격 */
-    margin-top: 20px;
+  display: flex;
+  justify-content: space-between; /* 섹션 사이 여백 균등 */
+  gap: 20px; /* 섹션 간격 */
+  margin-top: 20px;
 
-    @media screen and (max-width: 768px) {
-        flex-direction: column; /* 화면이 작으면 세로로 배치 */
-    }
+  @media screen and (max-width: 768px) {
+    flex-direction: column; /* 화면이 작으면 세로로 배치 */
+  }
 `;
 
 const Section = styled.section`
-    flex: 1; /* 두 섹션이 같은 비율로 공간 차지 */
-    padding: 0 15px;
-    background: #f9f9f9;
-    border-radius: 8px;
-    min-width: 300px; /* 너무 좁아지지 않도록 */
+  flex: 1; /* 두 섹션이 같은 비율로 공간 차지 */
+  padding: 0 15px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  min-width: 300px; /* 너무 좁아지지 않도록 */
 `;
 
 
@@ -150,13 +187,13 @@ const Button = styled.button`
 `
 
 const OptionsGrid = styled.div`
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 2열 그리드 */
-    gap: 15px;
-    padding: 15px;
-    background: #f9f9f9;
-    border-radius: 8px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2열 그리드 */
+  gap: 15px;
+  padding: 15px;
+  background: #f9f9f9;
+  border-radius: 8px;
 `;
 
 
-export default RetirementCalc;
+export default DividendCalc;
