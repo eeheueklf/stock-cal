@@ -4,9 +4,12 @@ import styled from 'styled-components';
 import FormField from "../../components/_Form/FormField";
 import InfoItem from "../../components/_Form/InfoItem";
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
+import DividendResult from "../result/DividendResult";
 
 
 const DividendCalc = () => {
+    const navigate = useNavigate();
     const [options, setOptions] = useState({
         tax: "과세",
         inflation: "3.0%",
@@ -46,47 +49,50 @@ const DividendCalc = () => {
         { term: "배당주기", description: "SCHD 분기배당 / JEPI 월배당. 상품에 따라 설정 필요." }
     ];
 
+    const [result, setResult] = useState(null);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setOptions({ ...options, [name]: value });
     };
 
+
     const handleSubmit = async (e) => {
         e.preventDefault(); // 폼 제출 방지
 
+        const payload = {
+            tax: options.tax,
+            inflation: parseFloat(options.inflation),
+            reinvest: options.reinvest === "Yes",
+            dividendGrowth: parseFloat(options.dividendGrowth),
+            initialInvestment: parseFloat(options.initialInvestment),
+            dividendYield: parseFloat(options.dividendYield),
+            monthlyInvestment: parseFloat(options.monthlyInvestment),
+            dividendCycle: options.dividendCycle,
+            monthlyIncrease: parseFloat(options.monthlyIncrease)
+        };
+
         try {
-            const payload = {
-                tax: options.tax,
-                inflation: parseFloat(options.inflation),  // 문자열을 숫자로 변환
-                reinvest: options.reinvest === "Yes",  // Yes/No를 boolean으로 변환
-                dividendGrowth: parseFloat(options.dividendGrowth),
-                initialInvestment: parseFloat(options.initialInvestment),
-                dividendYield: parseFloat(options.dividendYield),
-                monthlyInvestment: parseFloat(options.monthlyInvestment),
-                dividendCycle: options.dividendCycle,
-                monthlyIncrease: parseFloat(options.monthlyIncrease)
-            };
-
-            console.log(payload)
-
-            const response = await axios.post('http://localhost:8080/api/dividend', payload, {
+            const res = await axios.post("http://localhost:8080/api/dividend", payload, {
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'  // 서버에서 JSON을 받아들일 수 있도록 설정
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
                 }
             });
-
-            console.log('Response:', response.data); // 서버에서 반환한 데이터 처리
-        } catch (error) {
-            console.error("Error in POST request:", error);
-            // 에러 상태 로그
-            if (error.response) {
-                console.error("Response error:", error.response.data);
-                console.error("Response status:", error.response.status);
+            console.log("Payload:", payload);
+            console.log("Response:", res.data);
+            setResult(res.data)
+            // 성공 후 처리할 로직이 있으면 여기에
+        } catch (err) {
+            console.error("Axios POST error:", err);
+            if (err.response) {
+                console.error("Status:", err.response.status);
+                console.error("Data:", err.response.data);
             }
         }
     };
+
+
 
     return (
         <PostContainer>
@@ -109,12 +115,19 @@ const DividendCalc = () => {
                     </ButtonWrap>
                 </OptionsGrid>
                 <ContentWrapper>
-                    <Section>
-                        <InfoItem items={infoList1} />
-                    </Section>
-                    <Section>
-                        <InfoItem items={infoList2} />
-                    </Section>
+                    {result ? (
+                        <DividendResult result={result} />
+                    ) :
+                    (
+                        <>
+                            <Section>
+                                <InfoItem items={infoList1} />
+                            </Section>
+                            <Section>
+                                <InfoItem items={infoList2} />
+                            </Section>
+                        </>
+                    )}
                 </ContentWrapper>
 
             </PostContent>
@@ -194,6 +207,7 @@ const OptionsGrid = styled.div`
   background: #f9f9f9;
   border-radius: 8px;
 `;
+
 
 
 export default DividendCalc;

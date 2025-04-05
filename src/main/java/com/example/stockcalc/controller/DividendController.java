@@ -20,7 +20,7 @@ public class DividendController {
         this.calculationService = calculationService;
     }
 
-    @PostMapping("/api/dividend")
+    @PostMapping(value = "/api/dividend")
     public ResponseEntity<DividendResponseDTO> calculate(@RequestBody DividendRequestDTO request) {
         int years = 10;
 

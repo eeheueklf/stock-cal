@@ -12,6 +12,8 @@ public class DividendRequestDTO {
     private double dividendGrowthRate; // 배당 성장률
     private double dividendYield;      // 시가 배당률
 
+    public DividendRequestDTO() {}
+
     public double getInitialInvestment() {
         return initialInvestment;
     }

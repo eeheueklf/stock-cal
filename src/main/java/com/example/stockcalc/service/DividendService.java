@@ -1,52 +1,57 @@
 package com.example.stockcalc.service;
 
-import com.example.stockcalc.dto.DividendRequestDTO;
-import com.example.stockcalc.dto.DividendResponseDTO;
+import com.example.stockcalc.dto.*;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class DividendService {
 
     public DividendResponseDTO calculateDividend(DividendRequestDTO request, int years) {
-        double totalInvestment = request.getInitialInvestment();
-        double totalDividends = 0;
-        double currentInvestment = totalInvestment;
-        double currentDividend;
-
-        List<Double> investmentGrowth = new ArrayList<>();
+        List<DividendYearlyResultDTO> results = new ArrayList<>();
+        double investedAmount = request.getInitialInvestment();
+        double accumulatedDividend = 0;
+        double currentValue = investedAmount;
 
         for (int year = 1; year <= years; year++) {
-            currentDividend = currentInvestment * request.getDividendYield() / 100;
-            totalDividends += currentDividend;
+            double annualDividend = currentValue * request.getDividendYield() / 100;
+            accumulatedDividend += annualDividend;
 
-            // 배당재투자 여부 체크
+            double yearlyAddition = request.getMonthlyInvestment() * 12 +
+                    request.getMonthlyIncrease() * 12;
+
             if (request.isReinvest()) {
-                currentInvestment += currentDividend;
+                currentValue += annualDividend;
             }
 
-            // 월 적립식 투자금 및 증액 처리
-            if (request.getMonthlyIncrease() > 0) {
-                currentInvestment += request.getMonthlyInvestment() * 12 + request.getMonthlyIncrease() * 12;
-            } else {
-                currentInvestment += request.getMonthlyInvestment() * 12;
-            }
+            currentValue += yearlyAddition;
 
-            // 물가상승률 적용 (선택적 적용)
             if (request.getInflationRate() > 0) {
-                currentInvestment *= (1 + (double) request.getInflationRate() / 100);  // 물가상승률을 반영하여 매년 투자금 증가
+                currentValue *= 1 + request.getInflationRate() / 100.0;
             }
 
-            investmentGrowth.add(currentInvestment);
+            double priceGrowth = currentValue - investedAmount - yearlyAddition;  // 단순 추정
+            double dividendRate = annualDividend / currentValue * 100;
+
+            DividendYearlyResultDTO yearResult = new DividendYearlyResultDTO();
+            yearResult.setYear(year);
+            yearResult.setInvestedAmount(investedAmount);
+            yearResult.setAnnualDividend(annualDividend);
+            yearResult.setDividendRate(dividendRate);
+            yearResult.setPriceGrowth(priceGrowth);
+            yearResult.setYearlyAddition(yearlyAddition);
+            yearResult.setTotalValue(currentValue);
+            yearResult.setAccumulatedDividend(accumulatedDividend);
+
+            results.add(yearResult);
+            investedAmount += yearlyAddition; // 실제 투자금 누적
         }
+
         DividendResponseDTO response = new DividendResponseDTO();
-        response.setTotalInvestment(currentInvestment);
-        response.setTotalDividends(totalDividends);
-        response.setInvestmentGrowth(investmentGrowth);
+        response.setTotalInvestment(currentValue);
+        response.setTotalDividends(accumulatedDividend);
+        response.setYearlyResults(results);
 
         return response;
     }
-
 }

@@ -8,6 +8,7 @@ import "../style.css"
 import DividendCalc from '../../page/calc/DividendCalc';
 import RetirementCalc from "../../page/calc/RetirementCalc";
 import Test from "../../page/calc/test";
+import DividendResult from "../../page/result/DividendResult";
 
 const Index = () => {
     return (
@@ -18,9 +19,10 @@ const Index = () => {
                 <Header />
                 <MainContent>
                     <Routes>
-                        <Route path="/" element={<DividendCalc />} />
+                        <Route path="/dividend" element={<DividendCalc />} />
+                        <Route path="/dividend/result" element={<DividendResult />} />
                         <Route path="/retire" element={<RetirementCalc />} />
-                        <Route path="/test" element={<Test />} />
+                        <Route path="/" element={<Test />} />
                     </Routes>
                 </MainContent>
             </ContentContainer>
