@@ -8,37 +8,29 @@ const DividendResult = ({ result }) => {
 
     return (
         <ResultWrapper>
-            <h3>📊 배당 계산 결과</h3>
+            <h3>📅 월/분기별 배당 내역</h3>
             <TableScrollWrapper>
-            <TableWrapper>
-                <thead>
-                <tr>
-                    <th>연차</th>
-                    <th>투자원금</th>
-                    <th>연간 배당금</th>
-                    <th>배당률 (%)</th>
-                    <th>주가 수익</th>
-                    <th>연간 추가</th>
-                    <th>총 평가액</th>
-                    <th>누적 배당</th>
-                </tr>
-                </thead>
-                <tbody>
-                {result.yearlyResults.map((year, index) => (
-                    <tr key={index}>
-                        <td>{year.year}</td>
-                        <td>{year.investedAmount.toLocaleString()}</td>
-                        <td>{year.annualDividend.toLocaleString()}</td>
-                        <td>{Number(year.dividendRate).toFixed(2)}</td>
-                        <td>{year.priceGrowth.toLocaleString()}</td>
-                        <td>{year.yearlyAddition.toLocaleString()}</td>
-                        <td>{year.totalValue.toLocaleString()}</td>
-                        <td>{year.accumulatedDividend.toLocaleString()}</td>
+                <TableWrapper>
+                    <thead>
+                    <tr>
+                        <th>연도</th>
+                        <th>월 or 분기</th>
+                        <th>배당금</th>
                     </tr>
-                ))}
-                </tbody>
-            </TableWrapper>
+                    </thead>
+                    <tbody>
+                    {result.monthlyResults.map((item, index) => (
+                        <tr key={index}>
+                            <td>{item.year}</td>
+                            <td>{item.month}</td>
+                            {/* or 분기 표시 */}
+                            <td>{item.dividend.toLocaleString()}</td>
+                        </tr>
+                    ))}
+                    </tbody>
+                </TableWrapper>
             </TableScrollWrapper>
+
             <Summary>
                 <p>최종 총 투자금 : {result.totalInvestment.toLocaleString()} 원</p>
                 <p>누적 배당금 : {result.totalDividends.toLocaleString()} 원</p>
@@ -57,8 +49,8 @@ const ResultWrapper = styled.div`
 `;
 
 const TableScrollWrapper = styled.div`
-  width: 100%;
-  overflow-x: auto;
+    width: 100%;
+    overflow-x: auto;
 `;
 
 const TableWrapper = styled.table`

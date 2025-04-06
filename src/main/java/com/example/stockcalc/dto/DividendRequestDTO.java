@@ -48,4 +48,5 @@ public class DividendRequestDTO {
     public String getTax() {
         return tax;
     }
+
 }

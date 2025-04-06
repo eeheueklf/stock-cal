@@ -2,55 +2,84 @@ package com.example.stockcalc.service;
 
 import com.example.stockcalc.dto.*;
 import org.springframework.stereotype.Service;
+
 import java.util.*;
 
 @Service
 public class DividendService {
 
-    public DividendResponseDTO calculateDividend(DividendRequestDTO request, int years) {
-        List<DividendYearlyResultDTO> results = new ArrayList<>();
+    public DividendResponseDTO calculateDividend(DividendRequestDTO request, int totalMonths) {
+        List<DividendMonthlyResultDTO> results = new ArrayList<>();
+        LinkedList<Double> dividendHistory = new LinkedList<>();
+
         double investedAmount = request.getInitialInvestment();
         double accumulatedDividend = 0;
         double currentValue = investedAmount;
+        double monthlyInvestment = request.getMonthlyInvestment();
+        double monthlyIncrease = request.getMonthlyIncrease();
 
-        for (int year = 1; year <= years; year++) {
-            double annualDividend = currentValue * request.getDividendYield() / 100;
-            accumulatedDividend += annualDividend;
+        double dividendYield = request.getDividendYield() / 100.0;
+        double dividendGrowthRate = request.getDividendGrowthRate() / 100.0;
+        double inflationRate = request.getInflationRate() / 100.0;
 
-            double yearlyAddition = request.getMonthlyInvestment() * 12 +
-                    request.getMonthlyIncrease() * 12;
+        int dividendFrequency = request.getDividendCycle().equals("월") ? 12 : 4;
+        int dividendInterval = 12 / dividendFrequency;
+        boolean isTaxed = request.getTax().equals("과세");
 
+        for (int month = 1; month <= totalMonths; month++) {
+            int year = (month - 1) / 12;
+            int currentMonth = (month - 1) % 12 + 1;
+
+            // 배당 발생 월인지 확인
+            boolean isDividendMonth = (currentMonth % dividendInterval == 0);
+            double monthlyDividend = isDividendMonth ? (currentValue * dividendYield / dividendFrequency) : 0.0;
+
+            // 세금 차감
+            if (isTaxed) {
+                monthlyDividend *= (1 - 0.15);
+            }
+
+            // 누적
+            accumulatedDividend += monthlyDividend;
+            dividendHistory.add(monthlyDividend);
+            if (dividendHistory.size() > 12) {
+                dividendHistory.removeFirst();
+            }
+
+            double sumLast12 = dividendHistory.stream().mapToDouble(Double::doubleValue).sum();
+
+            // 재투자
             if (request.isReinvest()) {
-                currentValue += annualDividend;
+                currentValue += monthlyDividend;
             }
 
-            currentValue += yearlyAddition;
+            // 투자금 추가
+            currentValue += monthlyInvestment + monthlyIncrease;
+            investedAmount += monthlyInvestment + monthlyIncrease;
 
-            if (request.getInflationRate() > 0) {
-                currentValue *= 1 + request.getInflationRate() / 100.0;
+            // 물가상승 반영 (매월)
+            if (inflationRate > 0) {
+                currentValue *= (1 + inflationRate / 12);
             }
 
-            double priceGrowth = currentValue - investedAmount - yearlyAddition;  // 단순 추정
-            double dividendRate = annualDividend / currentValue * 100;
+            // 배당성장 반영 (매월)
+            dividendYield *= (1 + dividendGrowthRate / 12);
 
-            DividendYearlyResultDTO yearResult = new DividendYearlyResultDTO();
-            yearResult.setYear(year);
-            yearResult.setInvestedAmount(investedAmount);
-            yearResult.setAnnualDividend(annualDividend);
-            yearResult.setDividendRate(dividendRate);
-            yearResult.setPriceGrowth(priceGrowth);
-            yearResult.setYearlyAddition(yearlyAddition);
-            yearResult.setTotalValue(currentValue);
-            yearResult.setAccumulatedDividend(accumulatedDividend);
+            DividendMonthlyResultDTO result = new DividendMonthlyResultDTO();
+            result.setYear(year);
+            result.setMonth(currentMonth);
+            result.setDividend(Math.round(monthlyDividend));
+            result.setLast12MonthsDividend(Math.round(sumLast12));
+            result.setMonthlyAverage(Math.round(sumLast12 / 12));
 
-            results.add(yearResult);
-            investedAmount += yearlyAddition; // 실제 투자금 누적
+            results.add(result);
         }
 
         DividendResponseDTO response = new DividendResponseDTO();
-        response.setTotalInvestment(currentValue);
+        response.setYearlyResults(new ArrayList<>()); // 비움
+        response.setMonthlyResults(results);
         response.setTotalDividends(accumulatedDividend);
-        response.setYearlyResults(results);
+        response.setTotalInvestment(currentValue);
 
         return response;
     }
